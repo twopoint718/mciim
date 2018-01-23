@@ -1,5 +1,0 @@
-let
-    type foo = string
-in
-    x
-end
