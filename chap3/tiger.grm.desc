@@ -1,0 +1,352 @@
+
+state 0:
+
+	program : . exp 
+
+	ID	shift 3
+	LET	shift 2
+
+	exp	goto 1
+	program	goto 33
+
+	.	error
+
+
+state 1:
+
+	program : exp .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 2:
+
+	exp : LET . decs IN expseq END 
+
+	TYPE	shift 9
+
+	dec	goto 8
+	decs	goto 7
+	fundec	goto 6
+	tydec	goto 5
+	vardec	goto 4
+
+	.	error
+
+
+state 3:
+
+	exp : ID .  (reduce by rule 15)
+
+
+
+	.	reduce by rule 15
+
+
+state 4:
+
+	dec : vardec .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 5:
+
+	dec : tydec .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 6:
+
+	dec : fundec .  (reduce by rule 5)
+
+
+
+	.	reduce by rule 5
+
+
+state 7:
+
+	exp : LET decs . IN expseq END 
+	decs : decs . dec 
+
+	IN	shift 11
+	TYPE	shift 9
+
+	dec	goto 10
+	fundec	goto 6
+	tydec	goto 5
+	vardec	goto 4
+
+	.	error
+
+
+state 8:
+
+	decs : dec .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 9:
+
+	tydec : TYPE . ID EQ ty 
+
+	ID	shift 12
+
+
+	.	error
+
+
+state 10:
+
+	decs : decs dec .  (reduce by rule 1)
+
+
+
+	.	reduce by rule 1
+
+
+state 11:
+
+	exp : LET decs IN . expseq END 
+
+	ID	shift 3
+	LET	shift 2
+
+	exp	goto 14
+	expseq	goto 13
+
+	.	error
+
+
+state 12:
+
+	tydec : TYPE ID . EQ ty 
+
+	EQ	shift 15
+
+
+	.	error
+
+
+state 13:
+
+	exp : LET decs IN expseq . END 
+	expseq : expseq . exp 
+
+	ID	shift 3
+	LET	shift 2
+	END	shift 17
+
+	exp	goto 16
+
+	.	error
+
+
+state 14:
+
+	expseq : exp .  (reduce by rule 12)
+
+
+
+	.	reduce by rule 12
+
+
+state 15:
+
+	tydec : TYPE ID EQ . ty 
+
+	ID	shift 21
+	LBRACE	shift 20
+	ARRAY	shift 19
+
+	ty	goto 18
+
+	.	error
+
+
+state 16:
+
+	expseq : expseq exp .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 17:
+
+	exp : LET decs IN expseq END .  (reduce by rule 14)
+
+
+
+	.	reduce by rule 14
+
+
+state 18:
+
+	tydec : TYPE ID EQ ty .  (reduce by rule 6)
+
+
+
+	.	reduce by rule 6
+
+
+state 19:
+
+	ty : ARRAY . OF ID 
+
+	OF	shift 22
+
+
+	.	error
+
+
+state 20:
+
+	ty : LBRACE . tyfields RBRACE 
+
+	ID	shift 24
+
+	tyfields	goto 23
+
+	.	error
+
+
+state 21:
+
+	ty : ID .  (reduce by rule 7)
+
+
+
+	.	reduce by rule 7
+
+
+state 22:
+
+	ty : ARRAY OF . ID 
+
+	ID	shift 25
+
+
+	.	error
+
+
+state 23:
+
+	ty : LBRACE tyfields . RBRACE 
+	tyfields : tyfields . COMMA ID COLON ID 
+
+	COMMA	shift 27
+	RBRACE	shift 26
+
+
+	.	error
+
+
+state 24:
+
+	tyfields : ID . COLON ID 
+
+	COLON	shift 28
+
+
+	.	error
+
+
+state 25:
+
+	ty : ARRAY OF ID .  (reduce by rule 9)
+
+
+
+	.	reduce by rule 9
+
+
+state 26:
+
+	ty : LBRACE tyfields RBRACE .  (reduce by rule 8)
+
+
+
+	.	reduce by rule 8
+
+
+state 27:
+
+	tyfields : tyfields COMMA . ID COLON ID 
+
+	ID	shift 29
+
+
+	.	error
+
+
+state 28:
+
+	tyfields : ID COLON . ID 
+
+	ID	shift 30
+
+
+	.	error
+
+
+state 29:
+
+	tyfields : tyfields COMMA ID . COLON ID 
+
+	COLON	shift 31
+
+
+	.	error
+
+
+state 30:
+
+	tyfields : ID COLON ID .  (reduce by rule 11)
+
+
+
+	.	reduce by rule 11
+
+
+state 31:
+
+	tyfields : tyfields COMMA ID COLON . ID 
+
+	ID	shift 32
+
+
+	.	error
+
+
+state 32:
+
+	tyfields : tyfields COMMA ID COLON ID .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 33:
+
+
+	EOF	accept
+
+
+	.	error
+
+24 of 60 action table entries left after compaction
+16 goto table entries
